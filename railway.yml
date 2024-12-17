@@ -1,0 +1,59 @@
+services:
+  automatisch-main:
+    # Service type: web or worker
+    type: web
+    # Dockerfile path
+    dockerfile: ./docker/Dockerfile
+    # Environment variables
+    env:
+      APP_ENV: production
+      PROTOCOL: https
+      PORT: 443
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+      WEBHOOK_SECRET_KEY: ${WEBHOOK_SECRET_KEY}
+      APP_SECRET_KEY: ${APP_SECRET_KEY}
+      HOST: ${RAILWAY_STATIC_URL}
+      POSTGRES_HOST: ${DATABASE_HOST}
+      POSTGRES_PORT: ${DATABASE_PORT}
+      POSTGRES_DATABASE: ${DATABASE_NAME}
+      POSTGRES_USERNAME: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+
+  automatisch-worker:
+    type: worker
+    dockerfile: ./docker/Dockerfile
+    env:
+      WORKER: true
+      APP_ENV: production
+      PROTOCOL: https
+      PORT: 443
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+      WEBHOOK_SECRET_KEY: ${WEBHOOK_SECRET_KEY}
+      APP_SECRET_KEY: ${APP_SECRET_KEY}
+      HOST: ${RAILWAY_STATIC_URL}
+      POSTGRES_HOST: ${DATABASE_HOST}
+      POSTGRES_PORT: ${DATABASE_PORT}
+      POSTGRES_DATABASE: ${DATABASE_NAME}
+      POSTGRES_USERNAME: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+
+  automatisch-redis:
+    type: redis
+    # No additional configuration required
+
+databases:
+  - name: automatisch-database
+    # Railway will automatically generate the database credentials
+    # You can access them using the ${DATABASE_*} variables
+
+variables:
+  - key: ENCRYPTION_KEY
+    generateValue: true
+  - key: WEBHOOK_SECRET_KEY
+    generateValue: true
+  - key: APP_SECRET_KEY
+    generateValue: true
